@@ -101,20 +101,6 @@ mcols(resLRT, use.names=TRUE)
 summary(resLRT$padj)
 sum(resLRT$padj<1e-04, na.rm=TRUE)
 
-# 
-# mcols(r1)
-# 
-# r2 <- results(DS.analysis.exp2014, name="Treamtent_2_vs_1")
-# r2 <- results(DS.analysis.exp2014, name="Treatment_2_vs_1")
-# mcols(r2)
-# summary(r2$padj)
-# sum(r2$padj<0.01, na.rm=TRUE)
-# replications(meta.data.2014)
-# replications(meta.data.2013)
-# table(meta.data.2013)
-# table(meta.data.2013$Treat)
-# table(meta.data.2013$Harvest)
-
 resLRT104 <- results(DS.analysis.exp2014.LRT, alpha=1e-04)
 sum(resLRT104$padj<1e-04, na.rm=TRUE)
 
@@ -168,25 +154,24 @@ table(substr(gene.names.mc[which(resLRT.mG$padj < 1e-04)], start=7, stop=9))
 genes.int <- gene.names.mc[which(resLRT.i$padj < 1e-04)]
 genes.int
 
-as.matrix(resLRT.i@listData)[which(resLRT.i$padj < 1e-04),]
-
-sl <- slot(resLRT.i, "listData")
-sl.m <- matrix(unlist(sl), nrow=16343, ncol=6)
-dim(sl.m)
-
-sl.m[which(resLRT.i$padj < 1e-04),]
 
 
-levelplot(cor(cl.exp2014[,2:97]), xlab=NULL, ylab=NULL, scales=list(draw=FALSE))
-
-which(id.2014$Harv==1)
-
-seqqi <- 2:97
-seqqi1 <- seqqi[which(id.2014$Harv==1)]
-seqqi2 <- seqqi[which(id.2014$Harv==2)]
-
-levelplot(cor(cl.exp2014[,seqqi1]), xlab=NULL, ylab=NULL, scales=list(draw=FALSE))
-levelplot(cor(cl.exp2014[,seqqi2]), xlab=NULL, ylab=NULL, scales=list(draw=FALSE))
+# sl <- slot(resLRT.i, "listData")
+# sl.m <- matrix(unlist(sl), nrow=16343, ncol=6)
+# dim(sl.m)
+# 
+# sl.m[which(resLRT.i$padj < 1e-04),]
+# 
+# levelplot(cor(cl.exp2014[,2:97]), xlab=NULL, ylab=NULL, scales=list(draw=FALSE))
+# 
+# which(id.2014$Harv==1)
+# 
+# seqqi <- 2:97
+# seqqi1 <- seqqi[which(id.2014$Harv==1)]
+# seqqi2 <- seqqi[which(id.2014$Harv==2)]
+# 
+# levelplot(cor(cl.exp2014[,seqqi1]), xlab=NULL, ylab=NULL, scales=list(draw=FALSE))
+# levelplot(cor(cl.exp2014[,seqqi2]), xlab=NULL, ylab=NULL, scales=list(draw=FALSE))
 
 
 y <- cl.exp2014[1,2:97]
