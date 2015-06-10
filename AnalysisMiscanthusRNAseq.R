@@ -183,6 +183,34 @@ summary(m1)
 summary(aov(m1))
 summary(aov(m1))[[1]]$Pr[3] #p-value from the anova table for Harvest
 
+pv.harvest <- rep(NA, dim(cl.exp2014)[1])
+
+system.time(
+for(i in 1:dim(cl.exp2014)[1]){
+  y <- cl.exp2014[i,2:97]
+  mod <- glm.nb(unlist(y) ~ Treatment*Genotype + Harvest, data=id.2014) 
+  pv.harvest[i] <- summary(aov(mod))[[1]]$Pr[3] #p-value from the anova table for Harvest
+  print(i)  
+}
+)
+
+pv.block <- rep(NA, dim(cl.exp2014)[1])
+pv.row <- rep(NA, dim(cl.exp2014)[1])
+pv.col <- rep(NA, dim(cl.exp2014)[1])
+
+
+system.time(
+  for(i in 1:dim(cl.exp2014)[1]){
+    y <- cl.exp2014[i,2:97]
+    mod1 <- glm.nb(unlist(y) ~ Treatment*Genotype + block, data=id.2014) 
+    pv.block[i] <- summary(aov(mod1))[[1]]$Pr[3] #p-value from the anova table for Harvest
+    mod2 <- glm.nb(unlist(y) ~ Treatment*Genotype + newrow14 + newcol14, data=id.2014) 
+    pv.row[i] <- summary(aov(mod2))[[1]]$Pr[3] #p-value from the anova table for Harvest
+    pv.col[i] <- summary(aov(mod2))[[1]]$Pr[4] #p-value from the anova table for Harvest
+    print(i)  
+  }
+)
+
 
 
 
