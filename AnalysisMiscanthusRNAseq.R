@@ -204,13 +204,46 @@ system.time(
     y <- cl.exp2014[i,2:97]
     mod1 <- glm.nb(unlist(y) ~ Treatment*Genotype + block, data=id.2014) 
     pv.block[i] <- summary(aov(mod1))[[1]]$Pr[3] #p-value from the anova table for Harvest
-    mod2 <- glm.nb(unlist(y) ~ Treatment*Genotype + newrow14 + newcol14, data=id.2014) 
-    pv.row[i] <- summary(aov(mod2))[[1]]$Pr[3] #p-value from the anova table for Harvest
-    pv.col[i] <- summary(aov(mod2))[[1]]$Pr[4] #p-value from the anova table for Harvest
     print(i)  
   }
 )
 
+summary(pv.harvest)
+length(which(pv.harvest<0.05))
+length(which(pv.harvest<0.01))
+length(which(pv.harvest<0.001))
+length(which(pv.harvest<0.0001))
+
+summary(pv.block)
+length(which(pv.block<0.05))
+length(which(pv.block<0.01))
+length(which(pv.block<0.001))
+length(which(pv.block<0.0001))
+
+which(resLRT.i$padj < 1e-04)%in%which(pv.harvest<0.0001)
+which(resLRT.i$padj < 1e-04)%in%which(pv.harvest<0.001)
+which(resLRT.i$padj < 1e-04)%in%which(pv.harvest<0.01)
+which(resLRT.i$padj < 1e-04)%in%which(pv.harvest<0.05)
+
+sum(which(resLRT$padj < 1e-04)%in%which(pv.harvest<0.0001))
+sum(which(resLRT.mT$padj < 1e-04)%in%which(pv.harvest<0.0001))
+
+which(resLRT.i$padj < 1e-04)%in%which(pv.harvest<0.001)
+which(resLRT.i$padj < 1e-04)%in%which(pv.harvest<0.01)
+which(resLRT.i$padj < 1e-04)%in%which(pv.harvest<0.05)
+
+
+#error message with row/column
+# 
+# system.time(
+#   for(i in 1:dim(cl.exp2014)[1]){
+#     y <- cl.exp2014[i,2:97]
+#     mod2 <- glm.nb(unlist(y) ~ Treatment*Genotype + newrow14 + newcol14, data=id.2014) 
+#     pv.row[i] <- summary(aov(mod2))[[1]]$Pr[3] #p-value from the anova table for Harvest
+#     pv.col[i] <- summary(aov(mod2))[[1]]$Pr[4] #p-value from the anova table for Harvest
+#     print(i)  
+#   }
+# )
 
 
 
