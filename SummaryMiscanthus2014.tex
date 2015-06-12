@@ -1,0 +1,42 @@
+\documentclass[12pt, a4paper]{article}
+
+%opening
+\title{Summary results DE analysis Miscanthus 2014 AU-IBERS}
+\author{Sabine K. Schnabel}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Description of the data}
+\begin{itemize}
+\item Counts table for the 2014 experiment at AU-IBERS (produced by IGATS)
+\item RNAseq data from Miscanthus mapped to Sorghum Bicolor
+\item Originally 33032 genes in the table $\rightarrow$ after data cleaning
+\footnote{Genes with no expression in any of the samples were removed. Additionally all genes with a mean expression for the non-zero counts of 10 or less were removed.} 
+16343 genes in table 
+\item 96 samples were taken from this green house experiment in two harvests (May 31, 2014 and June 15, 2014). The 
+experiment ran from May 5, 2014 to June 18, 2014 (application of drought treatment as of May 12, 2014).
+\item Two treatments: control and drought (check \%); five genotypes (WAT03 -sacchariflorus; 
+WAT04 -sacchariflorus; 
+WAT09 -giganteus; 
+WAT10 -sinensis; 
+WAT11 -sinensis).
+\item The greenhouse design was not officially randomized, but it seems fairly "random". We have information on
+the row/column position and a block number.
+\item Replications: each genotype was harvest replicated 9-10 times per harvest which leads to a replication of about 4-5 samples per harvest/genotype/treatment combination. 
+\end{itemize}
+Plot of the experimental design?
+
+\section*{DE analysis using DESeq2}
+Before starting the statistical analysis using \texttt{DESeq2} we ran some check on whether the greenhouse design or 
+sampling scheme (through 2 harvests) might have an effect on the expression (analysis). 
+To this end we used \texttt{glm.nb} including the design terms and checked for the significance of these factors. 
+Based on the results we decided to include \texttt{Harvest} into the model in order to control for it.
+
+
+
+\end{document}
+
+
