@@ -245,6 +245,35 @@ resLRT.h.h <- results(DS.analysis.exp2014.LRT.h.h, alpha=1e-04)
 mcols(resLRT.h.h)
 sum(resLRT.h.h$padj<1e-04, na.rm=TRUE)
 
+sessionInfo()
+
+# > sessionInfo()
+# R version 3.2.0 (2015-04-16)
+# Platform: x86_64-w64-mingw32/x64 (64-bit)
+# Running under: Windows 7 x64 (build 7601) Service Pack 1
+# 
+# locale:
+#   [1] LC_COLLATE=English_United Kingdom.1252  LC_CTYPE=English_United Kingdom.1252    LC_MONETARY=English_United Kingdom.1252
+# [4] LC_NUMERIC=C                            LC_TIME=English_United Kingdom.1252    
+# 
+# attached base packages:
+#   [1] parallel  stats4    grid      stats     graphics  grDevices utils     datasets  methods   base     
+# 
+# other attached packages:
+#   [1] MASS_7.3-40               DESeq2_1.8.1              RcppArmadillo_0.5.100.1.0 Rcpp_0.11.6               GenomicRanges_1.20.3     
+# [6] GenomeInfoDb_1.4.0        IRanges_2.2.1             S4Vectors_0.6.0           BiocGenerics_0.14.0       rgl_0.95.1247            
+# [11] gridExtra_0.9.1           ggplot2_1.0.1             gplots_2.17.0             RColorBrewer_1.1-2        lattice_0.20-31          
+# [16] XLConnect_0.2-11          XLConnectJars_0.2-9      
+# 
+# loaded via a namespace (and not attached):
+#   [1] genefilter_1.50.0    gtools_3.4.2         locfit_1.5-9.1       reshape2_1.4.1       splines_3.2.0        rJava_0.9-6         
+# [7] colorspace_1.2-6     survival_2.38-1      XML_3.98-1.1         foreign_0.8-63       DBI_0.3.1            BiocParallel_1.2.1  
+# [13] lambda.r_1.1.7       plyr_1.8.2           stringr_1.0.0        munsell_0.4.2        gtable_0.1.2         futile.logger_1.4.1 
+# [19] caTools_1.17.1       labeling_0.3         latticeExtra_0.6-26  Biobase_2.28.0       geneplotter_1.46.0   AnnotationDbi_1.30.1
+# [25] proto_0.3-10         acepack_1.3-3.3      KernSmooth_2.23-14   xtable_1.7-4         scales_0.2.4         gdata_2.16.1        
+# [31] Hmisc_3.16-0         annotate_1.46.0      XVector_0.8.0        digest_0.6.8         stringi_0.4-1        tools_3.2.0         
+# [37] bitops_1.0-6         magrittr_1.5         RSQLite_1.0.0        Formula_1.2-1        cluster_2.0.1        futile.options_1.0.0
+# [43] rpart_4.1-9          nnet_7.3-9          
 
 # sl <- slot(resLRT.i, "listData")
 # sl.m <- matrix(unlist(sl), nrow=16343, ncol=6)
