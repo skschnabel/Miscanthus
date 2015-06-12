@@ -82,6 +82,9 @@ id.2014$newcol14 <- as.factor(id.2014$newcol14)
 DS.exp2014 <- DESeqDataSetFromMatrix(countData = cl.exp2014[,2:97], colData = id.2014, 
                                      design = ~Treatment*Genotype)
 
+DS.exp2014.h <- DESeqDataSetFromMatrix(countData = cl.exp2014[,2:97], colData = id.2014, 
+                                       design = ~Harvest + Treatment*Genotype)
+
 Sys.time()
 system.time(
   DS.analysis.exp2014 <- DESeq(DS.exp2014, betaPrior = FALSE)
@@ -154,6 +157,93 @@ table(substr(gene.names.mc[which(resLRT.mG$padj < 1e-04)], start=7, stop=9))
 genes.int <- gene.names.mc[which(resLRT.i$padj < 1e-04)]
 genes.int
 
+###the same analysis but now correcting for Harvest
+
+Sys.time()
+system.time(
+  DS.analysis.exp2014.h <- DESeq(DS.exp2014.h, betaPrior = FALSE)
+)
+Sys.time()
+
+Sys.time()
+system.time(
+  DS.analysis.exp2014.LRT.h <- DESeq(DS.exp2014.h, betaPrior = FALSE, test="LRT", reduced=~Harvest + Genotype)
+)
+Sys.time()
+
+resLRT.h <- results(DS.analysis.exp2014.LRT.h)
+
+mcols(resLRT.h, use.names=TRUE)
+
+summary(resLRT.h$padj)
+sum(resLRT.h$padj<1e-04, na.rm=TRUE)
+
+resLRT104.h <- results(DS.analysis.exp2014.LRT.h, alpha=1e-04)
+sum(resLRT104.h$padj<1e-04, na.rm=TRUE)
+
+Sys.time()
+system.time(
+  DS.analysis.exp2014.LRT.i.h <- DESeq(DS.exp2014.h, betaPrior = FALSE, test="LRT", reduced=~Harvest + Treatment + Genotype)
+)
+Sys.time()
+
+resLRT.i.h <- results(DS.analysis.exp2014.LRT.i.h, alpha=1e-04)
+mcols(resLRT.i.h, use.names=TRUE)
+
+summary(resLRT.i.h$padj)
+sum(resLRT.i.h$padj<1e-04, na.rm=TRUE)
+
+DS.exp2014.main.h <- DESeqDataSetFromMatrix(countData = cl.exp2014[,2:97], colData = id.2014, 
+                                          design = ~ Harvest + Treatment + Genotype)
+
+Sys.time()
+system.time(
+  DS.analysis.exp2014.LRT.mT.h <- DESeq(DS.exp2014.main.h, betaPrior = FALSE, test="LRT", reduced=~Harvest + Genotype)
+)
+Sys.time()
+
+resLRT.mT.h <- results(DS.analysis.exp2014.LRT.mT.h, alpha=1e-04)
+mcols(resLRT.mT.h)
+
+Sys.time()
+system.time(
+  DS.analysis.exp2014.LRT.mG.h <- DESeq(DS.exp2014.main.h, betaPrior = FALSE, test="LRT", reduced=~Harvest + Treatment)
+)
+Sys.time()
+
+resLRT.mG.h <- results(DS.analysis.exp2014.LRT.mG.h, alpha=1e-04)
+mcols(resLRT.mG.h)
+sum(resLRT.mG.h$padj<1e-04, na.rm=TRUE)
+
+gene.names.mc <- cl.exp2014[,1]
+
+length(gene.names.mc)
+
+table(substr(gene.names.mc[which(resLRT.h$padj < 1e-04)], start=7, stop=9))
+
+sum(resLRT.h$padj<1e-04, na.rm=TRUE)
+sum(resLRT.i.h$padj<1e-04, na.rm=TRUE)
+sum(resLRT.mT.h$padj<1e-04, na.rm=TRUE)
+sum(resLRT.mG.h$padj<1e-04, na.rm=TRUE)
+
+table(substr(gene.names.mc[which(resLRT.h$padj < 1e-04)], start=7, stop=9))
+table(substr(gene.names.mc[which(resLRT.i.h$padj < 1e-04)], start=7, stop=9))
+table(substr(gene.names.mc[which(resLRT.mT.h$padj < 1e-04)], start=7, stop=9))
+table(substr(gene.names.mc[which(resLRT.mG.h$padj < 1e-04)], start=7, stop=9))
+
+genes.int.h <- gene.names.mc[which(resLRT.i.h$padj < 1e-04)]
+genes.int.h
+
+#just for fun: check for differential expression for harvest
+
+Sys.time()
+system.time(
+  DS.analysis.exp2014.LRT.h.h <- DESeq(DS.exp2014.h, betaPrior = FALSE, test="LRT", reduced=~Treatment*Genotype)
+)
+Sys.time()
+resLRT.h.h <- results(DS.analysis.exp2014.LRT.h.h, alpha=1e-04)
+mcols(resLRT.h.h)
+sum(resLRT.h.h$padj<1e-04, na.rm=TRUE)
 
 
 # sl <- slot(resLRT.i, "listData")
