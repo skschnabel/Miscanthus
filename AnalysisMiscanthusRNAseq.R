@@ -234,6 +234,26 @@ table(substr(gene.names.mc[which(resLRT.mG.h$padj < 1e-04)], start=7, stop=9))
 genes.int.h <- gene.names.mc[which(resLRT.i.h$padj < 1e-04)]
 genes.int.h
 
+dd <- data.frame(genes.int.h, round(resLRT.i.h$padj[which(resLRT.i.h$padj < 1e-04)], digits=20))
+
+dd.order <- dd[order(dd[,2]),]
+
+xtable(dd.order, digits=10)
+
+w.i <- which(resLRT.i.h$padj < 1e-04)
+w.m <- which(resLRT.mT.h$padj < 1e-04) 
+w.i%in%w.m
+w.i[w.i%in%w.m]
+w.m[w.m%in%w.i]
+
+genes.mT.h <- gene.names.mc[w.m] 
+indi <- which(genes.mT.h%in%genes.int.h)
+genes.mT.h.pure <- genes.mT.h[-indi]
+
+write.table(genes.mT.h.pure, "DEgenes_mainEffect_Treatment_alphabetically.txt", sep="\t")
+
+write.table(dd.order, "DEgenes_interaction_byP-Value.txt", sep="\t")
+
 #just for fun: check for differential expression for harvest
 
 Sys.time()
@@ -246,6 +266,8 @@ mcols(resLRT.h.h)
 sum(resLRT.h.h$padj<1e-04, na.rm=TRUE)
 
 sessionInfo()
+
+
 
 # > sessionInfo()
 # R version 3.2.0 (2015-04-16)
