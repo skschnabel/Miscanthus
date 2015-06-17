@@ -265,7 +265,80 @@ resLRT.h.h <- results(DS.analysis.exp2014.LRT.h.h, alpha=1e-04)
 mcols(resLRT.h.h)
 sum(resLRT.h.h$padj<1e-04, na.rm=TRUE)
 
+
+####################
+#include also section into it
+
+DS.exp2014.h.s <- DESeqDataSetFromMatrix(countData = cl.exp2014[,2:97], colData = id.2014, 
+                                       design = ~section*Harvest + Treatment*Genotype)
+
+Sys.time()
+system.time(
+  DS.analysis.exp2014.LRT.h.s.i <- DESeq(DS.exp2014.h.s, betaPrior = FALSE, test="LRT", reduced=~section*Harvest + Treatment + Genotype)
+)
+Sys.time()
+
+resLRT.h.s.i <- results(DS.analysis.exp2014.LRT.h.s.i, alpha=1e-04)
+
+mcols(resLRT.h.s.i, use.names=TRUE)
+
+summary(resLRT.h.s.i$padj)
+sum(resLRT.h.s.i$padj<1e-04, na.rm=TRUE)
+
+genes.int.h.s <- gene.names.mc[which(resLRT.h.s.i$padj < 1e-04)]
+genes.int.h.s
+
+dd.s <- data.frame(genes.int.h.s, round(resLRT.h.s.i$padj[which(resLRT.h.s.i$padj < 1e-04)], digits=20))
+
+dd.order.s <- dd.s[order(dd.s[,2]),]
+
+genes.int.h
+
+
+DS.exp2014.main.h.s <- DESeqDataSetFromMatrix(countData = cl.exp2014[,2:97], colData = id.2014, 
+                                            design = ~ section*Harvest + Treatment + Genotype)
+
+Sys.time()
+system.time(
+  DS.analysis.exp2014.LRT.mT.h.s <- DESeq(DS.exp2014.main.h.s, betaPrior = FALSE, test="LRT", reduced=~section*Harvest + Genotype)
+)
+Sys.time()
+
+resLRT.mT.h.s <- results(DS.analysis.exp2014.LRT.mT.h.s, alpha=1e-04)
+mcols(resLRT.mT.h.s)
+sum(resLRT.mT.h.s$padj<1e-04, na.rm=TRUE)
+
+genes.mT.h.s <- gene.names.mc[which(resLRT.mT.h.s$padj < 1e-04)]
+
+w.m.s <- which(resLRT.mT.h.s$padj < 1e-04) 
+w.i.s <- which(resLRT.h.s.i$padj < 1e-04)
+
+w.i.s%in%w.m.s
+
+genes.mT.h.s <- gene.names.mc[w.m.s] 
+indi <- which(genes.mT.h.s%in%genes.int.h.s)
+genes.mT.h.pure.s <- genes.mT.h.s[-indi]
+
+
+write.table(genes.mT.h.pure.s, "DEgenes_mainEffect_Treatment_alphabetically_withSectionInt.txt", sep="\t")
+
+write.table(dd.order.s, "DEgenes_interaction_byP-Value_withSectionInt.txt", sep="\t")
+
+#just for fun: check for differential expression for harvest
+
+Sys.time()
+system.time(
+  DS.analysis.exp2014.LRT.h.h <- DESeq(DS.exp2014.h, betaPrior = FALSE, test="LRT", reduced=~Treatment*Genotype)
+)
+Sys.time()
+resLRT.h.h <- results(DS.analysis.exp2014.LRT.h.h, alpha=1e-04)
+mcols(resLRT.h.h)
+sum(resLRT.h.h$padj<1e-04, na.rm=TRUE)
+
+
+###################
 sessionInfo()
+
 
 
 
@@ -373,6 +446,19 @@ which(resLRT.i$padj < 1e-04)%in%which(pv.harvest<0.001)
 which(resLRT.i$padj < 1e-04)%in%which(pv.harvest<0.01)
 which(resLRT.i$padj < 1e-04)%in%which(pv.harvest<0.05)
 
+
+pv.h <- rep(NA, dim(cl.exp2014)[1])
+pv.sec <- rep(NA, dim(cl.exp2014)[1])
+
+system.time(
+  for(i in 1:dim(cl.exp2014)[1]){
+    y <- cl.exp2014[i,2:97]
+    mod1 <- glm.nb(unlist(y) ~ Treatment*Genotype + Harvest + section, data=id.2014) 
+    pv.h[i] <- summary(aov(mod1))[[1]]$Pr[3] #p-value from the anova table for Harvest
+    pv.sec[i] <- summary(aov(mod1))[[1]]$Pr[4] #p-value from the anova table for section  
+    print(i)  
+  }
+)
 
 #error message with row/column
 # 
